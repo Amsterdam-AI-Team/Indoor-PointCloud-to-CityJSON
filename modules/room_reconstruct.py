@@ -70,10 +70,10 @@ class RoomReconstructor:
             # Write file
             logger.debug(f'Write temp file to {self.ply_infile}')
             pcd = o3d.t.geometry.PointCloud(pcd.point['positions'])
-            o3d.t.io.write_point_cloud('./in.ply', pcd, write_ascii=True)
+            o3d.t.io.write_point_cloud(self.ply_infile, pcd, write_ascii=True)
 
             logger.debug(f'Run PolyFit')
-            subprocess.run([self.exe_ransac_polyfiy, './in.ply', '.','0.01','100','0.1','1.5','0.6','0.5','0.27','0.23'],
+            subprocess.run([self.exe_ransac_polyfiy, self.ply_infile, '.','0.01','100','0.1','1.5','0.6','0.5','0.27','0.23'],
                     timeout=10, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             meshset = pymeshlab.MeshSet()
@@ -151,11 +151,11 @@ class RoomReconstructor:
 
         meshset = self._user_polyfit(pcd)
 
-        # if os.path.exists(ply_infile):
-        #     os.remove(ply_infile)
-        # if os.path.exists(mesh_outfile):
-        #     os.remove(mesh_outfile)
-        # if os.path.exists(dir_path):
-        #     os.remove(dir_path)
+        if os.path.exists(self.ply_infile):
+            os.remove(self.ply_infile)
+        if os.path.exists(self.mesh_outfile):
+            os.remove(self.mesh_outfile)
+        if os.path.exists(self.dir_path):
+            os.remove(self.dir_path)
 
         return meshset
