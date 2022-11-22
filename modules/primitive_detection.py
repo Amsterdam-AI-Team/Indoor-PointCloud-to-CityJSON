@@ -95,9 +95,9 @@ class PrimitiveDetector:
         return labels
     
     def _detect_vertical(self, pcd):
-        tmp_file = 'wrdir/cloud.ply'
-        if not os.path.isdir('wrdir'):
-            os.mkdir('wrdir')
+        tmp_file = './tmp_pr/cloud.ply'
+        if not os.path.isdir('./tmp_pr'):
+            os.mkdir('./tmp_pr')
 
         # point selection
         labels = np.full(len(pcd.points),-1)
@@ -122,9 +122,9 @@ class PrimitiveDetector:
         return pcd, labels
     
     def _detect_non_vertical(self, pcd):
-        tmp_file = 'wrdir/cloud.ply'
-        if not os.path.isdir('wrdir'):
-            os.mkdir('wrdir')
+        tmp_file = './tmp_pr/cloud.ply'
+        if not os.path.isdir('./tmp_pr'):
+            os.mkdir('./tmp_pr')
 
         # point selection
         labels = np.full(len(pcd.points), -1)

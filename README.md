@@ -10,7 +10,7 @@ The goal of this project is to automatically detect rooms in interior point clou
 
 This repository contains a five-staged pipeline that preprocesses, split into floors, detects rooms, reconstructs the surface, and computes volume and area
 
-For a quick dive into this repository take a look at our [0. Complete Pipeline](notebooks/0. Complete Pipeline.ipynb).
+For a quick dive into this repository take a look at our [0. Complete Pipeline](notebooks/0.%20Complete%20Pipeline.ipynb).
 
 ---
 
@@ -35,6 +35,17 @@ For a quick dive into this repository take a look at our [0. Complete Pipeline](
     ```
 
 3. Check out the [notebooks](notebooks) for a demonstration.
+
+---
+
+## Runnnig
+
+  1. Using the notebook [0. Complete Pipeline](notebooks/0.%20Complete%20Pipeline.ipynb)
+
+  2. Using command line `python script.py script.py [-h] --in_file path [--out_folder path]`: 
+  ```bash
+  python script.py --in_file './datasets/stadskwekerij_subsampled.ply'
+  ```
 
 ---
 
