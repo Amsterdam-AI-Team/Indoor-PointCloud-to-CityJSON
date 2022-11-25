@@ -34,7 +34,9 @@ For a quick dive into this repository take a look at our [0. Complete Pipeline](
     pip install -r requirements.txt
     ```
 
-3. Check out the [notebooks](notebooks) for a demonstration.
+3. Build the C++ modules located in the [scr/cpp-scrips](./src/cpp-scripts) folder using CMake.
+
+4. Check out the [notebooks](notebooks) for a demonstration.
 
 ---
 
