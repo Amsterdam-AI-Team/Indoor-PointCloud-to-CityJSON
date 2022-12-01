@@ -272,7 +272,7 @@ def compute_planarity(pcd, radius):
        
 def efficient_ransac(pcd, excecutable_path, file_path, normals_radius=.12, prob='0.001',
                      min_pts='200', eps='0.03', cluster_thres='0.12', normal_thres='0.5'):
-    '''Bla'''
+    '''Calls efficient RANSAC module'''
 
     try:
         # Compute normals
@@ -287,24 +287,19 @@ def efficient_ransac(pcd, excecutable_path, file_path, normals_radius=.12, prob=
              timeout=20, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Read point cloud
-        pcd = o3d.t.io.read_point_cloud(file_path)
+        pcd_ = o3d.t.io.read_point_cloud(file_path)
 
     except subprocess.TimeoutExpired:
-        # logger.error('RANSAC timeout')
-        print('error')
+        logger.error('RANSAC timeout')
     except subprocess.CalledProcessError as CPE:
-        # logger.error(f'Error in RANSAC with returncode {CPE.returncode}.')
-        print('error')
+        logger.error(f'Error in RANSAC with returncode {CPE.returncode}.')
     except Exception as e:
-        # logger.error(str(e))
-        print('error')
+        logger.error(str(e))
 
     if os.path.isfile(file_path):
         os.remove(file_path)
-
-    # logger.debug(f'Done. {np.round(time.time()-start,2)}s')
     
-    return pcd
+    return pcd_
 
 def unit_vector(vector):
     """ Returns the unit vector of the vector.  """
