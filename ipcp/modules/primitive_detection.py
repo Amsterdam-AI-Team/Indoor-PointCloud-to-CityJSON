@@ -108,9 +108,10 @@ class PrimitiveDetector:
         mask = mask[planarity > .3]
 
         # detect primtives
-        pcd_ = efficient_ransac(pcd.select_by_index(mask), self.excecutable_path, tmp_file)
-        labels[-len(mask):] = np.hstack(pcd_.point['plane_index'].numpy())
-        pcd = merge_point_clouds(pcd.select_by_index(mask, invert=True), pcd_.to_legacy())
+        pcd_ = pcd.select_by_index(mask)
+        pcd_, ransac_lables = efficient_ransac(pcd_, self.excecutable_path, tmp_file)
+        labels[-len(mask):] = ransac_lables
+        pcd = merge_point_clouds(pcd.select_by_index(mask, invert=True), pcd_)
         
         # region grow
         region_growing = RegionGrowing()
@@ -132,11 +133,12 @@ class PrimitiveDetector:
         mask = np.where(planarity > .5)[0]
 
         # detect primitives
-        pcd_ = efficient_ransac(pcd.select_by_index(mask),
+        pcd_ = pcd.select_by_index(mask)
+        pcd_, ransac_lables = efficient_ransac(pcd_,
                             self.excecutable_path, tmp_file, prob='0.005', 
                             eps='0.06', cluster_thres='0.15')
-        labels[-len(mask):] = np.hstack(pcd_.point['plane_index'].numpy())
-        pcd = merge_point_clouds(pcd.select_by_index(mask, invert=True), pcd_.to_legacy())
+        labels[-len(mask):] = ransac_lables
+        pcd = merge_point_clouds(pcd.select_by_index(mask, invert=True), pcd_)
 
         # clean verticals
         un_labels_ = np.unique(labels[labels>-1])
@@ -274,6 +276,8 @@ def efficient_ransac(pcd, excecutable_path, file_path, normals_radius=.12, prob=
                      min_pts='200', eps='0.03', cluster_thres='0.12', normal_thres='0.5'):
     '''Bla'''
 
+    labels = np.full(len(pcd.points),-1)
+
     try:
         # Compute normals
         if not pcd.has_normals():
@@ -287,24 +291,21 @@ def efficient_ransac(pcd, excecutable_path, file_path, normals_radius=.12, prob=
              timeout=20, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Read point cloud
-        pcd = o3d.t.io.read_point_cloud(file_path)
+        pcd_ = o3d.t.io.read_point_cloud(file_path)
+        pcd = pcd_.to_legacy()
+        labels = np.hstack(pcd_.point['plane_index'].numpy())
 
     except subprocess.TimeoutExpired:
-        # logger.error('RANSAC timeout')
-        print('error')
+        logger.error('RANSAC timeout')
     except subprocess.CalledProcessError as CPE:
-        # logger.error(f'Error in RANSAC with returncode {CPE.returncode}.')
-        print('error')
+        logger.error(f'Error in RANSAC with returncode {CPE.returncode}.')
     except Exception as e:
-        # logger.error(str(e))
-        print('error')
+        logger.error(str(e))
 
     if os.path.isfile(file_path):
         os.remove(file_path)
-
-    # logger.debug(f'Done. {np.round(time.time()-start,2)}s')
     
-    return pcd
+    return pcd, labels
 
 def unit_vector(vector):
     """ Returns the unit vector of the vector.  """

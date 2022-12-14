@@ -9,6 +9,7 @@ from pathlib import Path
 import src.utils.pcd_utils as pcd_utils
 import open3d as o3d
 import time
+import shutil
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ class RoomReconstructor:
             o3d.t.io.write_point_cloud(self.ply_infile, pcd, write_ascii=True)
 
             logger.debug(f'Run PolyFit')
-            subprocess.run([self.exe_ransac_polyfiy, self.ply_infile, '.','0.01','100','0.1','1.5','0.6','0.5','0.27','0.23'],
+            subprocess.run([self.exe_ransac_polyfiy, self.ply_infile, self.dir_path,'0.01','100','0.1','1.5','0.6','0.5','0.27','0.23'],
                     timeout=10, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             meshset = pymeshlab.MeshSet()
@@ -104,7 +105,7 @@ class RoomReconstructor:
 
             subprocess.run([self.exe_polyfit, self.ply_infile, self.dir_path,
                              str(self.fitting), str(self.coverage),
-                             str(self.complexity)], timeout=10, 
+                             str(self.complexity)], timeout=15, 
                              check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             meshset = pymeshlab.MeshSet()
@@ -151,11 +152,6 @@ class RoomReconstructor:
 
         meshset = self._user_polyfit(pcd)
 
-        if os.path.exists(self.ply_infile):
-            os.remove(self.ply_infile)
-        if os.path.exists(self.mesh_outfile):
-            os.remove(self.mesh_outfile)
-        if os.path.exists(self.dir_path):
-            os.remove(self.dir_path)
+        shutil.rmtree('./tmp_pr')
 
         return meshset

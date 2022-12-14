@@ -11,9 +11,9 @@ from modules.room_detection import RoomDetector
 from modules.room_reconstruct import RoomReconstructor
 from modules.mesh_stats import MeshAnalyser
 
-ransac_exe = './modules/efficient_ransac'
-reconstruct_exe = './modules/polyfit'
-reconstruct_ransac_exe = './modules/polyfit_ransac'
+ransac_exe = './cpp_modules/efficient_ransac'
+reconstruct_exe = './cpp_modules/polyfit'
+reconstruct_ransac_exe = './cpp_modules/polyfit_ransac'
 
 def main(in_file, out_folder):
     sor = SOR()
