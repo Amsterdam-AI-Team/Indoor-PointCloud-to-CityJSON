@@ -2,6 +2,8 @@
 
 This repository contains methods for the **automatic detection of rooms in interior PointClouds**. The methods can serve as inspiration, or can be applied as-is.
 
+![3D-interior-model](./imgs/3d_interion_model.png)
+
 ---
 
 ## Project Goal
