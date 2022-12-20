@@ -97,7 +97,7 @@ class FloorSplitter:
         return 0
 
     def _extract_floor(self, points, labels, primitives, bin_size, min_floor_size, min_cluster_size):
-            
+
         # create grid
         grid, edges, bins, hist_range, origin = self._create_3d_grid(points, bin_size)
         
@@ -147,17 +147,17 @@ class FloorSplitter:
         # Loop through ceiling candidates
         for l, _, ceil_max_z in ceiling_candidates:
             cand_z_proj = binned_statistic_2d(*points[labels==l].T, statistic='max', range=hist_range[:2], bins=bins[:2])[0]
-            cand_proj = binary_closing(cand_z_proj>0)
+            cand_proj = binary_closing(~np.isnan(cand_z_proj))
             
-            # print(l, np.sum(labels==l), np.sum(floor_proj[cand_proj]), np.sum(cand_proj))
-            floor_overlap = (np.sum(floor_proj[cand_proj]) / np.sum(cand_proj)).round(2)
-            ceiling_overlap = (np.sum(ceil_proj[cand_proj]) / np.sum(cand_proj)).round(2)
-
             # fig, ax = plt.subplots(1, 3, sharey=True)
             # ax[0].imshow(floor_proj)
             # ax[1].imshow(cand_proj)
             # ax[2].imshow(ceil_proj)
             # plt.show()
+            # print(l, np.sum(labels==l), np.sum(floor_proj[cand_proj]), np.sum(cand_proj))
+            
+            floor_overlap = (np.sum(floor_proj[cand_proj]) / np.sum(cand_proj)).round(2)
+            ceiling_overlap = (np.sum(ceil_proj[cand_proj]) / np.sum(cand_proj)).round(2)
             # print(l, ceiling_overlap, floor_overlap)
             
             # Check if ceiling is valid
@@ -173,7 +173,7 @@ class FloorSplitter:
                 break
 
         # Interpolate ceiling
-        ceil_mask = ceiling_map > 0
+        ceil_mask = ~np.isnan(ceiling_map)
         ceiling_map[~ceil_mask] = griddata(np.vstack(np.where(ceil_mask)).T, ceiling_map[ceil_mask], np.where(~ceil_mask), method='nearest')
 
         # Floor polygon
