@@ -38,7 +38,7 @@ class RegionGrowing:
     def _growing_neighbours(self, tree, points, radius=.2):
         return flatten(tree.query_ball_point(points, r=radius))
         
-    def _region_growing(self, pcd, regions, exclude=[-1]):
+    def _region_growing(self, pcd, regions, exclude=[-1], max_iter=2):
         """
         The work of this region growing algorithm is based on the comparison
         of the angles between the points normals.
@@ -67,7 +67,9 @@ class RegionGrowing:
             pcd_ = pcd.select_by_index(np.where(regions==region_label)[0])
             n, c = self._ransac_plane_fit(pcd_) # Normal & Center
 
-            while len(F) > 0:
+            i = 0
+            while len(F) > 0 and i < max_iter:
+                i += 1
                 try:
                     k_idx = conv[self._growing_neighbours(tree, P[F], .2)]
                     F = k_idx[~np.isin(k_idx, R)] # remove points in R and grown

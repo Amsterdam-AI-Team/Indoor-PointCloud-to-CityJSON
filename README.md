@@ -18,21 +18,27 @@ For a quick dive into this repository take a look at our [Complete Pipeline](ipc
 
 ## Folder Structure
 
-ipcp
+ * [`ipcp`](./ipcp)
+   * [`datasets`](./ipcp/datasets) _Example datasets of interior pointclouds_
+   * [`notebooks`](./ipcp/notebooks) _Jupyter notebook tutorials_
+   * [`src`](./ipcp/src) _Python source code_
+     * [`utils`](./ipcp/src/utils) _Utility functions_
+   * [`modules`](./ipcp/modules) _Pipeline modules_
+   * [`cpp_modules`](./ipcp/cpp_modules) _Pipeline C++ modules_
+   * [`preprocessors`](./ipcp/preprocessors) _Pre-processor modules_
 
- * [`datasets`](./ipcp/datasets) _Example datasets of interior pointclouds_
- * [`notebooks`](./ipcp/notebooks) _Jupyter notebook tutorials_
- * [`src`](./ipcp/src) _Python source code_
-   * [`utils`](./ipcp/src/utils) _Utility functions_
- * [`modules`](./ipcp/modules) _Pipeline modules_
- * [`cpp_modules`](./ipcp/cpp_modules) _Pipeline C++ modules_
- * [`preprocessors`](./ipcp/preprocessors) _Pre-processor modules_
+---
+
+## Dataset
+
+The sample pointcloud provided is a subsampled version of the "Apartment, merged & resampled" from the [Redwood Indoor Lidar-RGBD Scan Dataset](http://redwood-data.org/indoor_lidar_rgbd/download.html). When using this dataset, please cite the [original source](http://redwood-data.org/indoor_lidar_rgbd/license.html):
+ > Jaesik Park, Qian-Yi Zhou and Vladlen Koltun, _Colored Point Cloud Registration Revisited_. ICCV, 2017.
 
 ---
 
 ## Installation
 
-There are two ways for using this repository. The easiest and recomended way is to build and use the provided docker image (see instructions below). Option 2 is to build to pipeline from scratch for OS of preference.
+There are two ways for using this repository. The easiest and recommended way is to build and use the provided docker image (see instructions below). Option 2 is to build to pipeline from scratch for OS of preference.
 
 ### Option 1: Docker-image
 
@@ -40,7 +46,6 @@ There are two ways for using this repository. The easiest and recomended way is 
 
 2. Build docker image (the building can take a couple of minutes):
     ```bash
-    cd T3D_docker
     docker build -f Dockerfile . -t t3d_docker:latest
     ```
 
@@ -63,16 +68,16 @@ There are two ways for using this repository. The easiest and recomended way is 
   ```bash
   python -m pip install -r requirements.txt
   ```
-    
+
 ---
 
-## Runnnig
+## Running
 
   1. Using the notebook [Complete Pipeline](notebooks/Complete%20Pipeline.ipynb)
 
-  2. Using command line `python script.py script.py [-h] --in_file path [--out_folder path]`: 
+  2. Using command line `python script.py [-h] --in_file path [--out_folder path]`, e.g.:
   ```bash
-  python script.py --in_file './datasets/stadskwekerij_subsampled.ply'
+  python script.py --in_file './datasets/apt_subsampled.ply'
   ```
 
 ---
@@ -80,4 +85,3 @@ There are two ways for using this repository. The easiest and recomended way is 
 ## Acknowledgements
 
 This repository was created by _Falke Boskaljon_ for the City of Amsterdam.
-
